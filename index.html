@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script
+      src="https://code.jquery.com/jquery-3.6.1.js"
+      integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI="
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+
+  <body>
+    <p>로그인하세요.</p>
+    <button id="open">로그인</button>
+
+    <div class="black-bg">
+      <div class="white-bg">
+        <h4>로그인하세요</h4>
+
+        <form action="success.html">
+          <div class="my-3">
+            <input type="text" class="form-control" id="__id" />
+          </div>
+          <div class="my-3">
+            <input type="password" class="form-control" id="__pw" />
+          </div>
+          <button type="submit" class="btn btn-primary" id="__submit">전송</button>
+          <button type="button" class="btn btn-danger" id="close">닫기</button>
+        </form>
+      </div>
+    </div>
+
+    <script>
+      $('#open').on('click', function () {
+        $('.black-bg').addClass('show');
+      });
+
+      $('#close').on('click', function () {
+        $('.black-bg').removeClass('show');
+      });
+
+      $('form').on('submit', function (e) {
+        //id, click로해도됨
+        if (document.getElementById('__id').value == '' && $('#__pw').val() != '') {
+          //$('#email').val() == '' 로 대체가능
+          e.preventDefault();
+          alert('아이디가 공백입니다.');
+        } else if ($('#__id').val() != '' && $('#__pw').val() == '') {
+          e.preventDefault();
+          alert('패스워드가 공백입니다.');
+        } else if ($('#__id').val() == '' && $('#__pw').val() == '') {
+          e.preventDefault();
+          alert('아이디 패스워드 둘 다 공백입니다.');
+        } else if ($('#__pw').val().length < 6) {
+          e.preventDefault();
+          alert('패스워드가 6자 미만 입니다.');
+        } else {
+          alert('제출되었습니다.');
+        }
+      });
+
+      // 이벤트버블링 관련 스터디 밑에 부터 시작
+      // 이벤트버블링 - 이벤트가 상위 html로 퍼지는 현상
+      $('.black-bg').on('click', (e) => {
+        // 애초에 제이쿼리 셀렉터끼리 등호비교는 불가능 하다. is를 쓰거나 해야한다.
+        if ($(e.target).is($('.black-bg'))) {
+          // document.querySelector('.black-bg') == e.target을 써야한다.
+          // document.querySelector('.black-bg').classList.remove('show'); // 바닐라 코드
+          $('.black-bg').removeClass('show');
+        }
+      });
+
+      // 유용한 이벤트 관련 함수들..
+      document.querySelector('.black-bg').addEventListener('click', function (e) {
+        t = e.target; // 유저가 실제로 누른거
+        console.log(t);
+        c = e.currentTarget; // 이벤트리스너 달린 곳
+        console.log(this); // 이 함수에서는 위의 c가 this랑 같은 것을 의미한다.
+        e.preventDefault(); // 이벤트 기본동작 막아줌 만약 submit같은 버튼이면 그런 기본동작을 막아준다.
+        e.stopPropagation(); // 내 상위요소로 이벤트 버블링 막아줌
+      });
+    </script>
+  </body>
+</html>
